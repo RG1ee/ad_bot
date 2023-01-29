@@ -6,16 +6,15 @@ from aiogram.contrib.fsm_storage import memory
 
 from settings.const import token
 from handlers.echo import register_echo
-from handlers.start import register_start_message
+from handlers.user import register_start_message
 
 logger = logging.getLogger(__name__)
 
 
 def register_all_handlers(dp: Dispatcher):
-    
     register_start_message(dp)
     register_echo(dp)
-    
+
 
 async def main():
     logging.basicConfig(
