@@ -1,1 +1,3 @@
 BOT_TOKEN="your bot token"
+CHAT_ID="your channel/group id"
+CHAT_LINK="link to the chat to which you need to subscribe"
