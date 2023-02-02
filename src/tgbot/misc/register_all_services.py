@@ -1,8 +1,9 @@
 from aiogram import Dispatcher
 
 from tgbot.filters.admin import AdminFilter
-from tgbot.handlers.users import register_start_message
+from tgbot.handlers.users import register_functions_user
 from tgbot.misc.set_bot_commands import set_default_commands
+from tgbot.handlers.states.states_for_forms import register_state_form
 
 
 def register_all_filters(dp: Dispatcher):
@@ -10,7 +11,8 @@ def register_all_filters(dp: Dispatcher):
 
 
 def register_all_handlers(dp: Dispatcher):
-    register_start_message(dp)
+    register_functions_user(dp)
+    register_state_form(dp)
 
 
 async def register_all_services(dp: Dispatcher):
