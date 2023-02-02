@@ -1,41 +1,41 @@
 from aiogram import types
 
 
-KB = [
-    [
+def main_keyboard() -> types.ReplyKeyboardMarkup:
+    keyboard = types.ReplyKeyboardMarkup(
+        resize_keyboard=True, input_field_placeholder="Главное меню"
+    )
+    keyboard.add(
         types.KeyboardButton(text="Профиль👤"),
-        types.KeyboardButton(text="Заполнить анкету📋"),
+        types.KeyboardButton(text="Заполнить анкету📋")
+    )
+    keyboard.row(
         types.KeyboardButton(text="Что-то ещё🔜"),
         types.KeyboardButton(text="Помощь")
-    ]
-]
-KB_SETTINGS = types.ReplyKeyboardMarkup(
-    keyboard=KB,
-    resize_keyboard=True,
-    input_field_placeholder="Главное меню"
-)
+    )
+
+    return keyboard
 
 
-FORM_KB = [
-    [
-        types.KeyboardButton(text="Отмена🛑")
-    ]
-]
-FORM_KB_SETTINGS = types.ReplyKeyboardMarkup(
-    keyboard=FORM_KB,
-    resize_keyboard=True,
-    input_field_placeholder="Заполнение анкеты"
-)
+def cancel_keyboard() -> types.ReplyKeyboardMarkup:
+    keyboard = types.ReplyKeyboardMarkup(
+        resize_keyboard=True, input_field_placeholder="Заполнение анкеты"
+    )
+    keyboard.add(
+        types.KeyboardButton(text="Отменить🛑")
+    )
+
+    return keyboard
 
 
-FORM_CONFIRM_KB = [
-    [
+def confirm_keyboard() -> types.ReplyKeyboardMarkup:
+    keyboard = types.ReplyKeyboardMarkup(
+        resize_keyboard=True,
+        input_field_placeholder="Подтвердить заполнение"
+    )
+    keyboard.add(
         types.KeyboardButton(text="Подтвердить✅"),
-        types.KeyboardButton(text="Отмена🛑")
-    ]
-]
-FORM_CONFIRM_KB_SETTINGS = types.ReplyKeyboardMarkup(
-    keyboard=FORM_CONFIRM_KB,
-    resize_keyboard=True,
-    input_field_placeholder="Подтвердите заполнение"
-)
+        types.KeyboardButton(text="Отменить🛑")
+    )
+
+    return keyboard

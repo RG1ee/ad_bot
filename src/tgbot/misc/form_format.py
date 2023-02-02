@@ -1,7 +1,6 @@
 def format(data):
     FORM = f"""
     <b>{data['company_name']}</b>
-    
 <i>{data['company_discription']}</i>
 
 <b>Обязанности:</b>
