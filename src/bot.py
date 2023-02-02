@@ -4,30 +4,26 @@ import logging
 from aiogram import Bot, Dispatcher
 from aiogram.contrib.fsm_storage import memory
 
-from settings.const import token
-from handlers.echo import register_echo
-from handlers.user import register_start_message
+from settings import config
+from tgbot.misc.register_all_services import register_all_services
 
 logger = logging.getLogger(__name__)
-
-
-def register_all_handlers(dp: Dispatcher):
-    register_start_message(dp)
-    register_echo(dp)
 
 
 async def main():
     logging.basicConfig(
         level=logging.INFO
     )
-    logger.info("bot start")
+    logger.info("Starting Bot!")
+    conf = config.load_config()
 
     storage = memory.MemoryStorage()
 
-    bot = Bot(token)
-    dp = Dispatcher(bot, storage=storage)
+    bot = Bot(token=conf.tg_bot.token)
+    bot["config"] = conf
 
-    register_all_handlers(dp)
+    dp = Dispatcher(bot, storage=storage)
+    await register_all_services(dp)
 
     try:
         await dp.start_polling()
@@ -41,4 +37,4 @@ if __name__ == "__main__":
     try:
         asyncio.run(main())
     except (KeyboardInterrupt, SystemExit):
-        logger.error("bot stop")
+        logger.error("Bot stopped!")

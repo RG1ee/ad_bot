@@ -1,6 +1,11 @@
 import os
+from dotenv import load_dotenv
 
 
-token = os.getenv("BOT_TOKEN")
-chat_id = os.getenv("CHAT_ID")
-chat_link = os.getenv("CHAT_LINK")
+try:
+    load_dotenv()
+finally:
+    TOKEN = os.getenv("BOT_TOKEN")
+    ADMIN_IDS = (os.getenv("ADMIN"),)
+    CHAT_ID = os.getenv("CHAT_ID")
+    CHAT_LINK = os.getenv("CHAT_LINK")
