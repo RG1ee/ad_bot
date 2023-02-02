@@ -36,5 +36,5 @@ async def start_message(message: types.Message):
 
 def register_functions_user(dp: Dispatcher):
     dp.register_message_handler(start_message, commands=["start"], state="*")
-    dp.register_message_handler(help, commands=["help"], state="*")
+    dp.register_message_handler(help, Text("Помощь🛟"), state="*")
     dp.register_message_handler(profile, Text("Профиль👤"), state="*")

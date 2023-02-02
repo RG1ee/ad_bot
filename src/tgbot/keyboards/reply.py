@@ -10,8 +10,8 @@ def main_keyboard() -> types.ReplyKeyboardMarkup:
         types.KeyboardButton(text="Заполнить анкету📋")
     )
     keyboard.row(
-        types.KeyboardButton(text="Что-то ещё🔜"),
-        types.KeyboardButton(text="Помощь")
+        types.KeyboardButton(text="История анкет🕖"),
+        types.KeyboardButton(text="Помощь🛟")
     )
 
     return keyboard

@@ -7,17 +7,32 @@ from tgbot.keyboards.reply import cancel_keyboard, confirm_keyboard, main_keyboa
 from tgbot.misc.states.states import FSMForm
 
 
+async def confirm_handler(message: types.Message, state: dispatcher.FSMContext):
+    async with state.proxy() as data:
+        try:
+            keyboard = main_keyboard()
+            await message.answer(
+                f"Анкета компании <b>{data['company_name']}</b> сохранена",
+                reply_markup=keyboard,
+                parse_mode='html'
+                )
+            await state.finish()
+        except Exception:
+            await message.bot.delete_message(chat_id=message.chat.id, message_id=message.message_id)
+
+
 async def cancel_handler(message: types.Message, state: dispatcher.FSMContext):
     current_state = await state.get_state()
     if current_state is None:
-        return
+        await message.bot.delete_message(chat_id=message.chat.id, message_id=message.message_id)
+
+    await state.finish()
 
     keyboard = main_keyboard()
-    await state.finish()
     await message.answer(
         'Заполнение анкеты отменено, возвращение в главное меню',
         reply_markup=keyboard
-    )
+        )
 
 
 async def start_new_form(
@@ -42,7 +57,7 @@ async def save_company_name(
     if not message.text:
         await message.bot.send_message(
             message.from_user.id,
-            "Пришли мне текст"
+            "Я лучше понимаю, если мне пишут текстом😉"
         )
         return
 
@@ -59,7 +74,7 @@ async def company_discription(message: types.Message, state: dispatcher.FSMConte
     if not message.text:
         await message.bot.send_message(
             message.from_user.id,
-            "Пришли мне текст"
+            "Я лучше понимаю, если мне пишут текстом😉"
         )
         return
 
@@ -76,12 +91,12 @@ async def responsibilities(message: types.Message, state: dispatcher.FSMContext)
     if not message.text:
         await message.bot.send_message(
             message.from_user.id,
-            "Пришли мне текст"
+            "Я лучше понимаю, если мне пишут текстом😉"
         )
         return
 
     async with state.proxy() as data:
-        data['responsibilities'] = message.text
+        data['responsibilities'] = message.text.replace("\n", "\n—")
 
     await FSMForm.next()
     await message.answer(
@@ -93,12 +108,12 @@ async def requirements(message: types.Message, state: dispatcher.FSMContext):
     if not message.text:
         await message.bot.send_message(
             message.from_user.id,
-            "Пришли мне текст"
+            "Я лучше понимаю, если мне пишут текстом😉"
         )
         return
 
     async with state.proxy() as data:
-        data['requirements'] = message.text
+        data['requirements'] = message.text.replace("\n", "\n—")
 
     await FSMForm.next()
     await message.answer(
@@ -110,12 +125,12 @@ async def terms(message: types.Message, state: dispatcher.FSMContext):
     if not message.text:
         await message.bot.send_message(
             message.from_user.id,
-            "Пришли мне текст"
+            "Я лучше понимаю, если мне пишут текстом😉"
         )
         return
 
     async with state.proxy() as data:
-        data['terms'] = message.text
+        data['terms'] = message.text.replace("\n", "\n—")
 
     await FSMForm.next()
     await message.answer(
@@ -127,31 +142,35 @@ async def contact_link(message: types.Message, state: dispatcher.FSMContext):
     if not message.text:
         await message.bot.send_message(
             message.from_user.id,
-            "Пришли мне текст"
+            "Я лучше понимаю, если мне пишут текстом😉"
         )
         return
 
     async with state.proxy() as data:
-        data['contact_link'] = message.text
-        data_to_save = {
-            "company_name": data["company_name"],
-            "company_discription": data["company_discription"],
-            "responsibilities": data["responsibilities"],
-            "requirements": data["requirements"],
-            "terms": data["terms"],
-            "contact_link": data["contact_link"]
-        }
-        await state.finish()
+        keyboard = confirm_keyboard()
+        try:
+            if data['contact_link'] is not None:
+                await message.answer(
+                    "Я не понимаю Вас, выберите ответ с клавиатуры",
+                    reply_markup=keyboard
+                    )
+                return
+        except Exception:
+            data['contact_link'] = message.text
 
-    keyboard = confirm_keyboard()
     await message.answer(
-        text=format(data_to_save),
+        text=format(data),
         parse_mode='html',
         reply_markup=keyboard
     )
 
 
 def register_state_form(dp: dispatcher.Dispatcher):
+    dp.register_message_handler(
+        confirm_handler,
+        Text("Подтвердить✅"),
+        state="*"
+    )
     dp.register_message_handler(
         cancel_handler,
         Text("Отменить🛑"),
