@@ -6,7 +6,7 @@ from tgbot.keyboards.reply import main_keyboard
 
 
 async def profile(message: types.Message):
-    await message.answer("<b>Профиль:</b>\nАнкета отсутствует", parse_mode='html')
+    await message.answer("<b>Профиль:</b>\nАнкета отсутствует")
 
 
 async def help(message: types.Message):

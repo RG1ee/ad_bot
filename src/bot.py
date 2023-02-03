@@ -20,7 +20,7 @@ async def main():
 
     storage = memory.MemoryStorage()
 
-    bot = Bot(token=conf.tg_bot.token)
+    bot = Bot(token=conf.tg_bot.token, parse_mode="html")
     bot["config"] = conf
 
     dp = Dispatcher(bot, storage=storage)
