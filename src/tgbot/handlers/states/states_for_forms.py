@@ -4,16 +4,28 @@ from aiogram.dispatcher.filters import Text
 from tgbot.misc.form_format import format
 from tgbot.keyboards.reply import cancel_keyboard, confirm_keyboard, main_keyboard
 from tgbot.misc.states.states import FSMForm
+from tgbot.database.db_sqlite import DataBaseHelper
 
 
 async def confirm_handler(message: types.Message, state: dispatcher.FSMContext):
     async with state.proxy() as data:
         try:
             keyboard = main_keyboard()
+            data_to_save = {
+                "company_name": data["company_name"],
+                "company_discription": data["company_discription"],
+                "responsibilities": data["responsibilities"],
+                "requirements": data["requirements"],
+                "terms": data["terms"],
+                "contact_link": data["contact_link"],
+                "user_forms": data["user_forms"],
+            }
+            db = DataBaseHelper()
+            db.insert_from(data_to_save)
             await message.answer(
                 f"Анкета компании <b>{data['company_name']}</b> сохранена",
                 reply_markup=keyboard
-                )
+            )
             await state.finish()
         except Exception:
             await message.bot.delete_message(chat_id=message.chat.id, message_id=message.message_id)
@@ -155,6 +167,7 @@ async def contact_link(message: types.Message, state: dispatcher.FSMContext):
                 return
         except Exception:
             data["contact_link"] = message.text
+            data["user_forms"] = message.from_user.id
 
     await message.answer(
         text=format(data),
