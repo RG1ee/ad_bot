@@ -3,6 +3,7 @@ from aiogram.dispatcher.filters import Text
 
 from settings.const import CHAT_ID, CHAT_LINK
 from tgbot.keyboards.reply import main_keyboard
+from tgbot.database.db_sqlite import DataBaseHelper
 
 
 async def profile(message: types.Message):
@@ -21,6 +22,8 @@ async def start_message(message: types.Message):
         user_id=message.from_user.id
     )
     if sub_status.status != types.ChatMemberStatus.LEFT:
+        db = DataBaseHelper()
+        db.insert_user(message.from_user.id)
         keyboard = main_keyboard()
         await message.answer(
             text="Выберите нужное действие",

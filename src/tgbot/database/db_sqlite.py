@@ -37,3 +37,23 @@ class DataBaseHelper:
             """
         )
         self.connect.commit()
+
+    def insert_user(self, username_id: int):
+        self.cursor.execute(
+            """
+            INSERT OR IGNORE INTO users VALUES (?, ?, ?)
+            """, (None, username_id, 1)
+        )
+        self.connect.commit()
+
+    def insert_from(self, data: dict):
+        self.cursor.execute(
+            """
+            INSERT INTO forms VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            """, (
+                None, data["company_name"], data["company_discription"],
+                data["responsibilities"], data["requirements"], data["terms"],
+                data["contact_link"], data["user_forms"]
+            )
+        )
+        self.connect.commit()
