@@ -1,7 +1,6 @@
 from aiogram import types, dispatcher
 from aiogram.dispatcher.filters import Text
 
-
 from tgbot.misc.form_format import format
 from tgbot.keyboards.reply import cancel_keyboard, confirm_keyboard, main_keyboard
 from tgbot.misc.states.states import FSMForm
@@ -13,8 +12,7 @@ async def confirm_handler(message: types.Message, state: dispatcher.FSMContext):
             keyboard = main_keyboard()
             await message.answer(
                 f"Анкета компании <b>{data['company_name']}</b> сохранена",
-                reply_markup=keyboard,
-                parse_mode='html'
+                reply_markup=keyboard
                 )
             await state.finish()
         except Exception:
@@ -30,7 +28,7 @@ async def cancel_handler(message: types.Message, state: dispatcher.FSMContext):
 
     keyboard = main_keyboard()
     await message.answer(
-        'Заполнение анкеты отменено, возвращение в главное меню',
+        "Заполнение анкеты отменено, возвращение в главное меню",
         reply_markup=keyboard
         )
 
@@ -79,7 +77,7 @@ async def company_discription(message: types.Message, state: dispatcher.FSMConte
         return
 
     async with state.proxy() as data:
-        data['company_discription'] = message.text
+        data["company_discription"] = message.text
 
     await FSMForm.next()
     await message.answer(
@@ -96,7 +94,7 @@ async def responsibilities(message: types.Message, state: dispatcher.FSMContext)
         return
 
     async with state.proxy() as data:
-        data['responsibilities'] = message.text.replace("\n", "\n—")
+        data["responsibilities"] = message.text.replace("\n", "\n—")
 
     await FSMForm.next()
     await message.answer(
@@ -113,7 +111,7 @@ async def requirements(message: types.Message, state: dispatcher.FSMContext):
         return
 
     async with state.proxy() as data:
-        data['requirements'] = message.text.replace("\n", "\n—")
+        data["requirements"] = message.text.replace("\n", "\n—")
 
     await FSMForm.next()
     await message.answer(
@@ -130,7 +128,7 @@ async def terms(message: types.Message, state: dispatcher.FSMContext):
         return
 
     async with state.proxy() as data:
-        data['terms'] = message.text.replace("\n", "\n—")
+        data["terms"] = message.text.replace("\n", "\n—")
 
     await FSMForm.next()
     await message.answer(
@@ -149,18 +147,17 @@ async def contact_link(message: types.Message, state: dispatcher.FSMContext):
     async with state.proxy() as data:
         keyboard = confirm_keyboard()
         try:
-            if data['contact_link'] is not None:
+            if data["contact_link"] is not None:
                 await message.answer(
                     "Я не понимаю Вас, выберите ответ с клавиатуры",
                     reply_markup=keyboard
                     )
                 return
         except Exception:
-            data['contact_link'] = message.text
+            data["contact_link"] = message.text
 
     await message.answer(
         text=format(data),
-        parse_mode='html',
         reply_markup=keyboard
     )
 

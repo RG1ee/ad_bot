@@ -9,3 +9,4 @@ finally:
     ADMIN_IDS = (os.getenv("ADMINS").split(","),)
     CHAT_ID = os.getenv("CHAT_ID")
     CHAT_LINK = os.getenv("CHAT_LINK")
+    DB_NAME = os.getenv("DB_NAME", "db.sqlite3")
