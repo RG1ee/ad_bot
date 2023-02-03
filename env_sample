@@ -3,3 +3,6 @@ BOT_TOKEN="your bot token"
 CHAT_ID="your chat id"
 CHAT_LINK="your chat link"
 ADMINS="admin id [integer]"
+
+# DATABASE
+DB_NAME="example.sqlite3"

@@ -6,6 +6,7 @@ from aiogram.contrib.fsm_storage import memory
 
 from settings import config
 from tgbot.misc.register_all_services import register_all_services
+from tgbot.database.db_sqlite import DataBaseHelper
 
 logger = logging.getLogger(__name__)
 
@@ -26,6 +27,7 @@ async def main():
     await register_all_services(dp)
 
     try:
+        DataBaseHelper().setup_table
         await dp.start_polling()
     finally:
         await dp.storage.close()
