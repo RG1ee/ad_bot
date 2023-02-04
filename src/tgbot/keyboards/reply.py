@@ -7,7 +7,8 @@ def main_keyboard() -> types.ReplyKeyboardMarkup:
     )
     keyboard.add(
         types.KeyboardButton(text="Профиль👤"),
-        types.KeyboardButton(text="Заполнить анкету📋")
+        types.KeyboardButton(text="Заполнить анкету📋"),
+        types.KeyboardButton(text="Все услуги🔥")
     )
     keyboard.row(
         types.KeyboardButton(text="История анкет🕖"),
