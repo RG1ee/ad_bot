@@ -39,3 +39,14 @@ def confirm_keyboard() -> types.ReplyKeyboardMarkup:
     )
 
     return keyboard
+
+
+def admin_keyboard() -> types.ReplyKeyboardMarkup:
+    keyboard = types.ReplyKeyboardMarkup(
+        resize_keyboard=True
+    )
+    keyboard.add(
+        types.KeyboardButton(text="Оплаченные анкеты")
+    )
+
+    return keyboard
