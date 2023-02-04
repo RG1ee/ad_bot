@@ -3,7 +3,10 @@ from aiogram.dispatcher.filters import Text
 
 from settings.const import CHAT_ID, CHAT_LINK
 from tgbot.keyboards.reply import main_keyboard
+from tgbot.keyboards.inline import help_pages_keyboard
 from tgbot.database.db_sqlite import DataBaseHelper
+from tgbot.misc.help_data import help_information
+from tgbot.misc.help_data import defaultPage
 
 
 async def profile(message: types.Message):
@@ -11,7 +14,12 @@ async def profile(message: types.Message):
 
 
 async def help(message: types.Message):
-    await message.answer("ПОМОЩЬ")
+    defaultPage()
+    keyboard = help_pages_keyboard()
+    await message.answer(
+        text=help_information[0],
+        reply_markup=keyboard
+    )
 
 
 async def start_message(message: types.Message):
