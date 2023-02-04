@@ -42,7 +42,7 @@ async def cancel_handler(message: types.Message, state: dispatcher.FSMContext):
     await message.answer(
         "Заполнение анкеты отменено, возвращение в главное меню",
         reply_markup=keyboard
-        )
+    )
 
 
 async def start_new_form(
@@ -74,10 +74,10 @@ async def save_company_name(
     async with state.proxy() as data:
         data["company_name"] = message.text
 
-    await FSMForm.next()
-    await message.answer(
-        "Далее опишите, чем занимается Ваша компания?"
-    )
+        await FSMForm.next()
+        await message.answer(
+            "Далее опишите, чем занимается Ваша компания?"
+        )
 
 
 async def company_discription(message: types.Message, state: dispatcher.FSMContext):

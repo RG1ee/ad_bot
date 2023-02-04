@@ -1,27 +1,29 @@
 from aiogram import types, Dispatcher
-from aiogram.dispatcher.filters import Text
+from aiogram.dispatcher import FSMContext
 
 from settings.const import CHAT_ID, CHAT_LINK
-from tgbot.keyboards.reply import main_keyboard
+from tgbot.keyboards.reply import main_keyboard, admin_keyboard
 from tgbot.database.db_sqlite import DataBaseHelper
 
 
-async def profile(message: types.Message):
-    await message.answer("<b>Профиль:</b>\nАнкета отсутствует")
-
-
-async def help(message: types.Message):
-    await message.answer("ПОМОЩЬ")
-
-
-async def start_message(message: types.Message):
+async def start_message(message: types.Message, state: FSMContext):
     await message.answer(f"Здравствуйте, {message.from_user.first_name}")
 
-    sub_status = await message.bot.get_chat_member(
+    await state.finish()
+
+    user_status = await message.bot.get_chat_member(
         chat_id=CHAT_ID,
         user_id=message.from_user.id
     )
-    if sub_status.status != types.ChatMemberStatus.LEFT:
+
+    if user_status.status == types.ChatMemberStatus.CREATOR:
+        keyboard = admin_keyboard()
+        await message.answer(
+            text="Выберите нужное действие",
+            reply_markup=keyboard
+        )
+
+    elif user_status.status != types.ChatMemberStatus.LEFT:
         db = DataBaseHelper()
         db.insert_user(message.from_user.id)
         keyboard = main_keyboard()
@@ -29,7 +31,7 @@ async def start_message(message: types.Message):
             text="Выберите нужное действие",
             reply_markup=keyboard
         )
-        pass
+
     else:
         await message.answer(
             "Для начала работы "
@@ -37,7 +39,5 @@ async def start_message(message: types.Message):
         )
 
 
-def register_functions_user(dp: Dispatcher):
+def register_user(dp: Dispatcher):
     dp.register_message_handler(start_message, commands=["start"], state="*")
-    dp.register_message_handler(help, Text("Помощь🛟"), state="*")
-    dp.register_message_handler(profile, Text("Профиль👤"), state="*")
