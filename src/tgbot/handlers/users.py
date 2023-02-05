@@ -21,10 +21,13 @@ async def start_message(message: types.Message, state: FSMContext):
     )
 
     if user_status.status == types.ChatMemberStatus.CREATOR:
-        keyboard = admin_keyboard()
+        db = DataBaseHelper()
+        db.insert_user(message.from_user.id)
+        keyboard = admin_keyboard(main_keyboard())
         await message.answer(
-            text="Выберите нужное действие",
-            reply_markup=keyboard
+            text="Выберите нужное действие\n" +
+            "<u>Режим администратора</u>",
+            reply_markup=keyboard,
         )
 
     elif user_status.status != types.ChatMemberStatus.LEFT:

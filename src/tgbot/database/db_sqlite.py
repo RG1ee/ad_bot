@@ -110,3 +110,10 @@ class DataBaseHelper:
             SELECT name_packege, packege_price, package_discription FROM servicePackages;
             """
         ).fetchall()
+
+    def select_service_with_key(self, name_service: str) -> list[Any]:
+        return self.cursor.execute(
+            """
+            SELECT * FROM services WHERE name_service = ?;
+            """, (name_service,)
+        ).fetchall()

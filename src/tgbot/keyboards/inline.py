@@ -21,16 +21,16 @@ def services_keyboard() -> types.InlineKeyboardMarkup:
         keyboard.add(
             types.InlineKeyboardButton(
                 text=f"{service[0]}",
-                callback_data=f"{service[0]}"
+                callback_data=f"service:{service[0]}"
             )
         )
 
-        keyboard.row(
-            types.InlineKeyboardButton(
-                text="ВЫГОДНЫЕ ПАКЕТЫ",
-                callback_data="service_packages"
-            )
+    keyboard.row(
+        types.InlineKeyboardButton(
+            text="ВЫГОДНЫЕ ПАКЕТЫ",
+            callback_data="service_packages"
         )
+    )
 
     return keyboard
 
@@ -42,8 +42,24 @@ def packages_keyboard() -> types.InlineKeyboardMarkup:
         keyboard.add(
             types.InlineKeyboardButton(
                 text=f"{package[0]}",
-                callback_data=f"{package[0]}"
+                callback_data="pgShow"
             )
         )
+
+    return keyboard
+
+
+def back_and_cart_keyboard(service_data: str) -> types.InlineKeyboardMarkup:
+    keyboard = types.InlineKeyboardMarkup(row_width=1)
+    keyboard.add(
+        types.InlineKeyboardButton(
+            text="В корзину",
+            callback_data=f"add_to_cart:{service_data}"
+        ),
+        types.InlineKeyboardButton(
+            text="Назад",
+            callback_data="return_services"
+        )
+    )
 
     return keyboard
