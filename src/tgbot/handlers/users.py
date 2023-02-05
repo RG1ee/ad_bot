@@ -2,12 +2,24 @@ from aiogram import types, Dispatcher
 from aiogram.dispatcher import FSMContext
 
 from settings.const import CHAT_ID, CHAT_LINK
+from tgbot.keyboards.inline import help_pages_keyboard
 from tgbot.keyboards.reply import main_keyboard, admin_keyboard
 from tgbot.database.db_sqlite import DataBaseHelper
+from tgbot.misc.help_data import help_information
+from tgbot.misc.help_data import defaultPage
 
 
 async def profile(message: types.Message):
     await message.answer("<b>Профиль:</b>\nАнкета отсутствует")
+
+
+async def help(message: types.Message):
+    defaultPage()
+    keyboard = help_pages_keyboard()
+    await message.answer(
+        text=help_information[0],
+        reply_markup=keyboard
+    )
 
 
 async def start_message(message: types.Message, state: FSMContext):
