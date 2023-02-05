@@ -5,9 +5,6 @@ from tgbot.misc.help_data import help_information
 from tgbot.misc.help_data import defaultPage
 from tgbot.keyboards.inline import help_pages_keyboard
 from tgbot.keyboards.inline import services_keyboard
-from tgbot.keyboards.inline import help_pages_keyboard
-from tgbot.misc.help_data import help_information
-from tgbot.misc.help_data import defaultPage
 
 
 async def profile(message: types.Message):
