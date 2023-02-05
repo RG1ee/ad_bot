@@ -45,4 +45,21 @@ def packages_keyboard() -> types.InlineKeyboardMarkup:
                 callback_data="pgShow"
             )
         )
+
+    return keyboard
+
+
+def back_and_cart_keyboard(service_data: str) -> types.InlineKeyboardMarkup:
+    keyboard = types.InlineKeyboardMarkup(row_width=1)
+    keyboard.add(
+        types.InlineKeyboardButton(
+            text="В корзину",
+            callback_data=f"add_to_cart:{service_data}"
+        ),
+        types.InlineKeyboardButton(
+            text="Назад",
+            callback_data="return_services"
+        )
+    )
+
     return keyboard

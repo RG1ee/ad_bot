@@ -18,6 +18,23 @@ def main_keyboard() -> types.ReplyKeyboardMarkup:
     return keyboard
 
 
+def admin_keyboard(main_keyboard: types.ReplyKeyboardMarkup):
+    keyboard = main_keyboard
+    keyboard.row(
+        types.KeyboardButton(
+            text="Оплаченные анкеты"
+        ),
+        types.KeyboardButton(
+            text="Посмотреть анкеты"
+        ),
+        types.KeyboardButton(
+            text="Выключить уведомления"
+        )
+    )
+
+    return keyboard
+
+
 def cancel_keyboard() -> types.ReplyKeyboardMarkup:
     keyboard = types.ReplyKeyboardMarkup(
         resize_keyboard=True, input_field_placeholder="Заполнение анкеты"
@@ -37,22 +54,6 @@ def confirm_keyboard() -> types.ReplyKeyboardMarkup:
     keyboard.add(
         types.KeyboardButton(text="Подтвердить✅"),
         types.KeyboardButton(text="Отменить🛑")
-    )
-
-    return keyboard
-
-
-def admin_keyboard() -> list:
-
-    keyboard = []
-    keyboard.append(
-        types.KeyboardButton(text="Оплаченные анкеты")
-    )
-    keyboard.append(
-        types.KeyboardButton(text="Посмотреть анкеты")
-    )
-    keyboard.append(
-        types.KeyboardButton(text="Выключить уведомления")
     )
 
     return keyboard

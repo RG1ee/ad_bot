@@ -1,23 +1,23 @@
 page = 0
 
 
-def returnPage() -> int:
+def return_page() -> int:
     return page
 
 
-def addictionPage() -> None:
+def addiction_page() -> None:
     global page
     page += 1
     return
 
 
-def subtractionPage() -> None:
+def subtraction_page() -> None:
     global page
     page -= 1
     return
 
 
-def defaultPage() -> None:
+def default_page() -> None:
     global page
     page = 0
     return
