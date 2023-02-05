@@ -20,7 +20,6 @@ async def help(message: types.Message):
         text=help_information[0],
         reply_markup=keyboard
     )
-    await message.answer("ПОМОЩЬ")
 
 
 async def services(message: types.Message):
