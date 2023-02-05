@@ -6,6 +6,10 @@ from tgbot.keyboards.reply import main_keyboard, admin_keyboard
 from tgbot.database.db_sqlite import DataBaseHelper
 
 
+async def profile(message: types.Message):
+    await message.answer("<b>Профиль:</b>\nАнкета отсутствует")
+
+
 async def start_message(message: types.Message, state: FSMContext):
     await message.answer(f"Здравствуйте, {message.from_user.first_name}")
 

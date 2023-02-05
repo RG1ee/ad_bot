@@ -3,6 +3,18 @@ from aiogram import types
 from tgbot.database.db_sqlite import DataBaseHelper
 
 
+def help_pages_keyboard() -> types.InlineKeyboardMarkup:
+    keyboard = types.InlineKeyboardMarkup()
+
+    keyboard.add(
+            types.InlineKeyboardButton(text="<<<", callback_data="back"),
+            types.InlineKeyboardButton(text=">>>", callback_data="forward")
+    )
+
+    return keyboard
+
+
+
 def services_keyboard() -> types.InlineKeyboardMarkup:
     db = DataBaseHelper()
     keyboard = types.InlineKeyboardMarkup(row_width=4)
