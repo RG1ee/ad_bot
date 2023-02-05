@@ -25,12 +25,12 @@ def services_keyboard() -> types.InlineKeyboardMarkup:
             )
         )
 
-        keyboard.row(
-            types.InlineKeyboardButton(
-                text="ВЫГОДНЫЕ ПАКЕТЫ",
-                callback_data="service_packages"
-            )
+    keyboard.row(
+        types.InlineKeyboardButton(
+            text="ВЫГОДНЫЕ ПАКЕТЫ",
+            callback_data="service_packages"
         )
+    )
 
     return keyboard
 

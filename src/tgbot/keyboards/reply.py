@@ -42,12 +42,17 @@ def confirm_keyboard() -> types.ReplyKeyboardMarkup:
     return keyboard
 
 
-def admin_keyboard() -> types.ReplyKeyboardMarkup:
-    keyboard = types.ReplyKeyboardMarkup(
-        resize_keyboard=True
-    )
-    keyboard.add(
+def admin_keyboard() -> list:
+    
+    keyboard = []
+    keyboard.append(
         types.KeyboardButton(text="Оплаченные анкеты")
+    )
+    keyboard.append(
+        types.KeyboardButton(text="Посмотреть анкеты")
+    )
+    keyboard.append(
+        types.KeyboardButton(text="Выключить уведомления")
     )
 
     return keyboard

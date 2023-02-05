@@ -10,27 +10,31 @@ async def page_back(callback: types.CallbackQuery):
 
     if returnPage() <= 0:
         return
-    subtractionPage()
-    info = str(help_information[returnPage()])
-    await callback.bot.delete_message(callback.message.chat.id, callback.message.message_id)
-    await callback.message.answer(
-        text=info,
-        reply_markup=keyboard,
-    )
+    
+    else:
+        subtractionPage()
+        info = str(help_information[returnPage()])
+        await callback.bot.delete_message(callback.message.chat.id, callback.message.message_id)
+        await callback.message.answer(
+            text=info,
+            reply_markup=keyboard,
+        )
 
 
 async def page_forward(callback: types.CallbackQuery):
     keyboard = help_pages_keyboard()
 
-    if returnPage() >= len(help_information):
+    if returnPage() >= len(help_information) - 1:
         return
-    addictionPage()
-    info = str(help_information[returnPage()])
-    await callback.bot.delete_message(callback.message.chat.id, callback.message.message_id)
-    await callback.message.answer(
-        text=info,
-        reply_markup=keyboard,
-    )
+    
+    else:
+        addictionPage()
+        info = str(help_information[returnPage()])
+        await callback.bot.delete_message(callback.message.chat.id, callback.message.message_id)
+        await callback.message.answer(
+            text=info,
+            reply_markup=keyboard,
+        )
 
 
 async def show_packages(callback: types.CallbackQuery):
