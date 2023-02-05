@@ -1,9 +1,11 @@
 from aiogram import types, dispatcher
 from aiogram.dispatcher.filters import Text
 
+
 from tgbot.misc.help_data import help_information
 from tgbot.misc.help_data import defaultPage
 from tgbot.keyboards.inline import help_pages_keyboard
+
 from tgbot.keyboards.inline import services_keyboard
 
 
@@ -18,6 +20,7 @@ async def help(message: types.Message):
         text=help_information[0],
         reply_markup=keyboard
     )
+    await message.answer("ПОМОЩЬ")
 
 
 async def services(message: types.Message):

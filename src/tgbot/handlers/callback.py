@@ -94,3 +94,8 @@ def register_all_callback(dp: dispatcher.Dispatcher):
         show_packages,
         lambda callback: "service_packages" in callback.data,
     )
+    dp.register_callback_query_handler(
+        show_packages,
+        lambda callback: "service_packages" in callback.data,
+        state="*"
+    )
