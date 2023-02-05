@@ -11,7 +11,7 @@ def main_keyboard() -> types.ReplyKeyboardMarkup:
         types.KeyboardButton(text="Все услуги🔥")
     )
     keyboard.row(
-        types.KeyboardButton(text="История анкет🕖"),
+        types.KeyboardButton(text="История заказов🕖"),
         types.KeyboardButton(text="Помощь🛟")
     )
 
@@ -43,7 +43,7 @@ def confirm_keyboard() -> types.ReplyKeyboardMarkup:
 
 
 def admin_keyboard() -> list:
-    
+
     keyboard = []
     keyboard.append(
         types.KeyboardButton(text="Оплаченные анкеты")

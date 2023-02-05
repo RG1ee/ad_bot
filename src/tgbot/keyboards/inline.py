@@ -21,7 +21,7 @@ def services_keyboard() -> types.InlineKeyboardMarkup:
         keyboard.add(
             types.InlineKeyboardButton(
                 text=f"{service[0]}",
-                callback_data=f"{service[0]}"
+                callback_data=f"service:{service[0]}"
             )
         )
 
@@ -42,8 +42,7 @@ def packages_keyboard() -> types.InlineKeyboardMarkup:
         keyboard.add(
             types.InlineKeyboardButton(
                 text=f"{package[0]}",
-                callback_data=f"{package[0]}"
+                callback_data="pgShow"
             )
         )
-
     return keyboard

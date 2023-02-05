@@ -27,8 +27,8 @@ async def start_message(message: types.Message, state: FSMContext):
             admin_keyboard()[1]
         )
         await message.answer(
-            text="Выберите нужное действие\n"+
-                "<u>Режим администратора</u>",
+            text="Выберите нужное действие\n" +
+            "<u>Режим администратора</u>",
             reply_markup=keyboard,
             parse_mode='html'
         )
