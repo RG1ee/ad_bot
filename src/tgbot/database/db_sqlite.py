@@ -59,6 +59,17 @@ class DataBaseHelper:
             """
         )
 
+        self.connect.execute(
+            """
+            CREATE TABLE IF NOT EXISTS cart (
+                user_id INTEGER,
+                product TEXT,
+                currency INTEGER,
+                FOREIGN KEY(user_id) REFERENCES users(telegram_id) ON UPDATE CASCADE
+            );
+            """
+        )
+
         # TODO finish the table with paid services
         # self.connect.execute(
         #     """
@@ -116,4 +127,12 @@ class DataBaseHelper:
             """
             SELECT * FROM services WHERE name_service = ?;
             """, (name_service,)
+        ).fetchall()
+
+    def select_products_from_cart(self, username_id) -> list[Any]:
+        return self.cursor.execute(
+            """
+            SELECT * FROM cart
+            WHERE user_id = ?;
+            """, (username_id,)
         ).fetchall()
