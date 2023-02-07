@@ -6,10 +6,6 @@ from tgbot.keyboards.reply import main_keyboard, admin_keyboard
 from tgbot.database.db_sqlite import DataBaseHelper
 
 
-async def profile(message: types.Message):
-    await message.answer("<b>Профиль:</b>\nАнкета отсутствует")
-
-
 async def start_message(message: types.Message, state: FSMContext):
     await message.answer(f"Здравствуйте, {message.from_user.first_name}")
 
@@ -29,7 +25,6 @@ async def start_message(message: types.Message, state: FSMContext):
             "<u>Режим администратора</u>",
             reply_markup=keyboard,
         )
-
     elif user_status.status != types.ChatMemberStatus.LEFT:
         db = DataBaseHelper()
         db.insert_user(message.from_user.id)
@@ -42,7 +37,8 @@ async def start_message(message: types.Message, state: FSMContext):
     else:
         await message.answer(
             "Для начала работы "
-            f"требуется подписка на телеграм канал:\n{CHAT_LINK}"
+            f"требуется подписка на телеграм канал:\n{CHAT_LINK}",
+            reply_markup=types.ReplyKeyboardRemove()
         )
 
 

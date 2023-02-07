@@ -136,3 +136,12 @@ class DataBaseHelper:
             WHERE user_id = ?;
             """, (username_id,)
         ).fetchall()
+
+    def add_product_to_cart(self, username_id: int, data: list[Any]) -> None:
+        self.cursor.execute(
+            """
+            INSERT OR IGNORE INTO cart VALUES (?, ?, ?);
+            """, (username_id, data[0], data[-1])
+        )
+
+        self.connect.commit()
