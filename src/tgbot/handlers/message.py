@@ -2,13 +2,21 @@ from aiogram import types, dispatcher
 from aiogram.dispatcher.filters import Text
 
 from tgbot.misc.help_data import help_information, default_page
-from tgbot.keyboards.inline import help_pages_keyboard, services_keyboard
+from tgbot.keyboards.inline import help_pages_keyboard, services_keyboard, profile_keyboard
+from tgbot.misc.decorators import check_user_status
 
 
+@check_user_status
 async def profile(message: types.Message):
-    await message.answer("<b>Профиль:</b>\nАнкета отсутствует")
+    keyboard = profile_keyboard()
+    await message.bot.send_message(
+        message.chat.id,
+        text="Мой профиль",
+        reply_markup=keyboard
+    )
 
 
+@check_user_status
 async def help(message: types.Message):
     default_page()
     keyboard = help_pages_keyboard()
@@ -18,6 +26,7 @@ async def help(message: types.Message):
     )
 
 
+@check_user_status
 async def services(message: types.Message):
     keyboard = services_keyboard()
     await message.answer("Все наши услуги", reply_markup=keyboard)
