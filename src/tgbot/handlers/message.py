@@ -11,7 +11,8 @@ async def profile(message: types.Message):
     keyboard = profile_keyboard()
     await message.bot.send_message(
         message.chat.id,
-        text="Мой профиль",
+        text="<b>Профиль\n\n</b>" +
+        f"{message.from_user.first_name} {message.from_user.last_name}",
         reply_markup=keyboard
     )
 

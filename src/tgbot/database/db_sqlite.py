@@ -63,6 +63,7 @@ class DataBaseHelper:
             """
             CREATE TABLE IF NOT EXISTS cart (
                 user_id INTEGER,
+                inCartCheck TEXT UNIQUE,
                 product TEXT,
                 currency INTEGER,
                 FOREIGN KEY(user_id) REFERENCES users(telegram_id) ON UPDATE CASCADE
@@ -140,8 +141,17 @@ class DataBaseHelper:
     def add_product_to_cart(self, username_id: int, data: list[Any]) -> None:
         self.cursor.execute(
             """
-            INSERT OR IGNORE INTO cart VALUES (?, ?, ?);
-            """, (username_id, data[0], data[-1])
+            INSERT INTO cart VALUES (?, ?, ?, ?);
+            """, (username_id, str(username_id)+data[0], data[0], data[-1])
+        )
+
+        self.connect.commit()
+
+    def clear_cart(self, username_id: int) -> None:
+        self.cursor.execute(
+            f"""
+            DELETE FROM cart WHERE user_id == {username_id};
+            """
         )
 
         self.connect.commit()

@@ -1,8 +1,9 @@
 from aiogram import types, dispatcher
 from aiogram.dispatcher.filters import Text
+from settings.const import CHAT_ID
 
 from tgbot.misc.form_format import format
-from tgbot.keyboards.reply import cancel_keyboard, confirm_keyboard, main_keyboard
+from tgbot.keyboards.reply import admin_keyboard, cancel_keyboard, confirm_keyboard, main_keyboard
 from tgbot.misc.states.states import FSMForm
 from tgbot.database.db_sqlite import DataBaseHelper
 
@@ -10,7 +11,15 @@ from tgbot.database.db_sqlite import DataBaseHelper
 async def confirm_handler(message: types.Message, state: dispatcher.FSMContext):
     async with state.proxy() as data:
         try:
-            keyboard = main_keyboard()
+            user_status = await message.bot.get_chat_member(
+                chat_id=CHAT_ID,
+                user_id=message.from_user.id
+            )
+
+            if user_status.status == types.ChatMemberStatus.CREATOR:
+                keyboard = admin_keyboard(main_keyboard())
+            else:
+                keyboard = main_keyboard()
             data_to_save = {
                 "company_name": data["company_name"],
                 "company_discription": data["company_discription"],
@@ -38,7 +47,16 @@ async def cancel_handler(message: types.Message, state: dispatcher.FSMContext):
 
     await state.finish()
 
-    keyboard = main_keyboard()
+    user_status = await message.bot.get_chat_member(
+        chat_id=CHAT_ID,
+        user_id=message.from_user.id
+    )
+
+    if user_status.status == types.ChatMemberStatus.CREATOR:
+        keyboard = admin_keyboard(main_keyboard())
+    else:
+        keyboard = main_keyboard()
+
     await message.answer(
         "Заполнение анкеты отменено, возвращение в главное меню",
         reply_markup=keyboard

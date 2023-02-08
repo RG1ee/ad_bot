@@ -1,4 +1,5 @@
 from aiogram import types, dispatcher
+from tgbot.misc.cart_fromat import cart
 
 from tgbot.misc.help_data import help_information, addiction_page, return_page, subtraction_page
 from tgbot.misc.service_fromat import service_information_format
@@ -62,7 +63,6 @@ async def show_packages(callback: types.CallbackQuery):
 
 
 async def show_service_info(callback: types.CallbackQuery):
-    print(callback.data.split(":"))
     keyboard = back_and_cart_keyboard(callback.data.split(":")[1])
 
     await callback.bot.delete_message(callback.message.chat.id, callback.message.message_id)
@@ -75,11 +75,17 @@ async def show_service_info(callback: types.CallbackQuery):
 async def add_to_cart(callback: types.CallbackQuery):
     db = DataBaseHelper()
     service_data = db.select_service_with_key(callback.data.split(":")[1])
-    db.add_product_to_cart(callback.from_user.id, service_data[0])
-    await callback.answer(
-        text=f"Услуга публикации в канале «{service_data[0][0]}» добавлена в корзину",
-        show_alert=True
-    )
+    try:
+        db.add_product_to_cart(callback.from_user.id, service_data[0])
+        await callback.answer(
+            text=f"Услуга публикации в канале «{service_data[0][0]}» добавлена в корзину",
+            show_alert=True
+        )
+    except Exception:
+        await callback.answer(
+            text="Услуга уже добавлена в корзину",
+            show_alert=True
+        )
 
 
 async def show_cart(callback: types.CallbackQuery):
@@ -90,15 +96,21 @@ async def show_cart(callback: types.CallbackQuery):
         callback.message.chat.id, callback.message.message_id
     )
     if len(all_products_from_cart) > 0:
+        keyboard.row(
+            types.InlineKeyboardButton(
+                text="Очистить корзину",
+                callback_data="clearCart"
+            )
+        )
         await callback.bot.send_message(
             callback.message.chat.id,
-            text=f"{all_products_from_cart}",  # TODO stylization shopping cart
+            text=cart(all_products_from_cart),
             reply_markup=keyboard
         )
     else:
         await callback.bot.send_message(
             callback.message.chat.id,
-            text="Корзина пустая",
+            text="Корзина пуста",
             reply_markup=keyboard
         )
 
@@ -119,6 +131,22 @@ async def back_to_menu(callback: types.CallbackQuery):
     await callback.bot.send_message(
         callback.message.chat.id,
         text="Мой профиль",
+        reply_markup=keyboard
+    )
+
+
+async def clear_cart(callback: types.CallbackQuery):
+    db = DataBaseHelper()
+    db.clear_cart(callback.from_user.id)
+
+    keyboard = back_to_menu_keyboard()
+
+    await callback.bot.delete_message(
+        callback.message.chat.id, callback.message.message_id
+    )
+    await callback.bot.send_message(
+        callback.message.chat.id,
+        text="Корзина пуста",
         reply_markup=keyboard
     )
 
@@ -167,5 +195,10 @@ def register_all_callback(dp: dispatcher.Dispatcher):
     dp.register_callback_query_handler(
         show_cart,
         lambda callback: "cart" in callback.data,
+        state="*"
+    )
+    dp.register_callback_query_handler(
+        clear_cart,
+        lambda callback: "clearCart" in callback.data,
         state="*"
     )
