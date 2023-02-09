@@ -1,4 +1,5 @@
 from aiogram import types, dispatcher
+
 from tgbot.misc.cart_fromat import cart
 
 from tgbot.misc.help_data import help_information, addiction_page, return_page, subtraction_page
@@ -9,9 +10,7 @@ from tgbot.keyboards.inline import (
     help_pages_keyboard,
     services_keyboard,
     packages_keyboard,
-    back_and_cart_keyboard,
-    back_to_menu_keyboard,
-    profile_keyboard,
+    back_and_cart_keyboard, back_to_menu_keyboard, profile_keyboard,
 )
 
 
@@ -106,8 +105,13 @@ async def show_cart(callback: types.CallbackQuery):
             types.InlineKeyboardButton(
                 text="Очистить корзину",
                 callback_data="clear_cart"
+            ),
+            types.InlineKeyboardButton(
+                text="Оплатить",
+                callback_data="buy"
             )
         )
+
         await callback.bot.send_message(
             callback.message.chat.id,
             text=cart(all_products_from_cart),

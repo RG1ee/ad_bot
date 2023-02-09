@@ -70,21 +70,19 @@ class DataBaseHelper:
             """
         )
 
-        # TODO finish the table with paid services
-        # self.connect.execute(
-        #     """
-        #     CREATE TABLE IF NOT EXISTS paidOrders (
-        #         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        #         id_form INTEGER NOT NULL,
-        #         user_id INTEGER NOT NULL,
-        #         price INTEGER NOT NULL,
-        #         date TIMESTAMP NOT NULL,
-        #         posted BOOL,
-        #         FOREIGN KEY(id_form) REFERENCES forms(id) ON UPDATE CASCADE,
-        #         FOREIGN KEY(user_id) REFERENCES users(telegram_id) ON UPDATE CASCADE
-        #     );
-        #     """
-        # )
+        self.connect.execute(
+            """
+            CREATE TABLE IF NOT EXISTS paidOrders (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id_form INTEGER NOT NULL,
+                user_id INTEGER NOT NULL,
+                date TIMESTAMP NOT NULL,
+                posted BOOL,
+                FOREIGN KEY(id_form) REFERENCES forms(id) ON UPDATE CASCADE,
+                FOREIGN KEY(user_id) REFERENCES users(telegram_id) ON UPDATE CASCADE
+            );
+            """
+        )
 
         self.connect.commit()
 
@@ -107,6 +105,14 @@ class DataBaseHelper:
             )
         )
         self.connect.commit()
+
+    def select_form(self, username_id) -> list[Any]:
+        return self.cursor.execute(
+            """
+            SELECT * FROM forms
+            WHERE user_forms = ?;
+            """, (username_id,)
+        ).fetchall()
 
     def select_all_services(self) -> list[Any]:
         return self.cursor.execute(
@@ -148,10 +154,10 @@ class DataBaseHelper:
 
     def check_product_in_cart(self, username_id: int) -> list[Any]:
         return self.cursor.execute(
-            f"""
-            SELECT product FROM cart
-            WHERE user_id == {username_id};
             """
+            SELECT product, currency FROM cart
+            WHERE user_id == ?;
+            """, (username_id,)
         ).fetchall()
 
     def clear_cart(self, username_id: int) -> None:
@@ -159,6 +165,17 @@ class DataBaseHelper:
             """
             DELETE FROM cart WHERE user_id == ?;
             """, (username_id,)
+        )
+
+        self.connect.commit()
+
+    def add_to_paid_orders(self, data: dict):
+        self.cursor.execute(
+            """
+            INSERT INTO paidOrders VALUES (
+                ?, ?, ?, ?, ?
+            );
+            """, (None, data["id_from"], data["user_id"], data["date"], 0)
         )
 
         self.connect.commit()

@@ -10,3 +10,4 @@ finally:
     CHAT_ID = os.getenv("CHAT_ID")
     CHAT_LINK = os.getenv("CHAT_LINK")
     DB_NAME = os.getenv("DB_NAME", "db.sqlite3")
+    PROVIDER_TOKEN = os.getenv("PAYMENT_TOKEN")
