@@ -9,7 +9,9 @@ from tgbot.database.db_sqlite import DataBaseHelper
 def build_cart(username_id) -> list:
     db = DataBaseHelper()
     prices = [
-        types.LabeledPrice(label=product[1], amount=product[2] * 100) for product in db.select_products_from_cart(username_id)
+        types.LabeledPrice(
+            label=product[1], amount=product[2] * 100
+        ) for product in db.select_products_from_cart(username_id)
     ]
     print(db.select_form(username_id))
 
@@ -35,7 +37,6 @@ async def buy_process(callback: types.CallbackQuery):
 
 
 async def checkout_process(pre_checkout: types.PreCheckoutQuery):
-    print("HELLO")
     await pre_checkout.bot.answer_pre_checkout_query(
         pre_checkout.id, ok=True, error_message="что-то пошло не так"
     )
