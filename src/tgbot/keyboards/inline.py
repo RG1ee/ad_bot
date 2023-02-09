@@ -82,10 +82,6 @@ def back_to_menu_keyboard() -> types.InlineKeyboardMarkup:
     keyboard = types.InlineKeyboardMarkup()
     keyboard.add(
         types.InlineKeyboardButton(
-            text="Оплатить",
-            callback_data="buy"
-        ),
-        types.InlineKeyboardButton(
             text="Назад",
             callback_data="back_to_menu"
         )
