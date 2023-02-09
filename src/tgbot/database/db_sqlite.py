@@ -140,8 +140,25 @@ class DataBaseHelper:
     def add_product_to_cart(self, username_id: int, data: list[Any]) -> None:
         self.cursor.execute(
             """
-            INSERT OR IGNORE INTO cart VALUES (?, ?, ?);
+            INSERT INTO cart VALUES (?, ?, ?);
             """, (username_id, data[0], data[-1])
+        )
+
+        self.connect.commit()
+
+    def check_product_in_cart(self, username_id: int) -> list[Any]:
+        return self.cursor.execute(
+            f"""
+            SELECT product FROM cart
+            WHERE user_id == {username_id};
+            """
+        ).fetchall()
+
+    def clear_cart(self, username_id: int) -> None:
+        self.cursor.execute(
+            """
+            DELETE FROM cart WHERE user_id == ?;
+            """, (username_id,)
         )
 
         self.connect.commit()

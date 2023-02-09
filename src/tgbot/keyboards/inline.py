@@ -71,7 +71,7 @@ def profile_keyboard() -> types.InlineKeyboardMarkup:
             text="Корзина", callback_data="cart"
         ),
         types.InlineKeyboardButton(
-            text="Мои вакансии", callback_data="my_form"
+            text="Мои анкеты", callback_data="my_form"
         )
     )
 
@@ -81,6 +81,10 @@ def profile_keyboard() -> types.InlineKeyboardMarkup:
 def back_to_menu_keyboard() -> types.InlineKeyboardMarkup:
     keyboard = types.InlineKeyboardMarkup()
     keyboard.add(
+        types.InlineKeyboardButton(
+            text="Оплатить",
+            callback_data="buy"
+        ),
         types.InlineKeyboardButton(
             text="Назад",
             callback_data="back_to_menu"
