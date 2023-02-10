@@ -154,7 +154,7 @@ class DataBaseHelper:
             SELECT * FROM services WHERE name_service = ?;
             """, (name_service,)
         ).fetchall()
-    
+
     def select_package_with_key(self, name_package: str) -> list[Any]:
         return self.cursor.execute(
             """

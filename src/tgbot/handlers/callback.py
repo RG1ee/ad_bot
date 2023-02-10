@@ -86,9 +86,9 @@ async def show_package_info(callback: types.CallbackQuery):
 
 async def add_to_cart(callback: types.CallbackQuery):
     db = DataBaseHelper()
-    
+
     service_data = db.select_service_with_key(callback.data.split(":")[1])
-    
+
     if service_data == []:
         print("ЗАГЛУШКА: Добавление пакета")
         return
