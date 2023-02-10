@@ -20,6 +20,7 @@ async def confirm_handler(message: types.Message, state: dispatcher.FSMContext):
                 keyboard = admin_keyboard(main_keyboard())
             else:
                 keyboard = main_keyboard()
+
             data_to_save = {
                 "company_name": data["company_name"],
                 "company_discription": data["company_discription"],
@@ -30,11 +31,18 @@ async def confirm_handler(message: types.Message, state: dispatcher.FSMContext):
                 "user_forms": data["user_forms"],
             }
             db = DataBaseHelper()
-            db.insert_from(data_to_save)
-            await message.answer(
-                f"Анкета компании <b>{data['company_name']}</b> сохранена",
-                reply_markup=keyboard
-            )
+            if db.select_form(message.from_user.id) == []:
+                db.insert_from(data_to_save)
+                await message.answer(
+                    f"Анкета компании <b>{data['company_name']}</b> сохранена",
+                    reply_markup=keyboard
+                )
+            else:
+                db.update_from(data_to_save)
+                await message.answer(
+                    f"Анкета компании <b>{data['company_name']}</b> обновлена",
+                    reply_markup=keyboard
+                )
             await state.finish()
         except Exception:
             await message.bot.delete_message(chat_id=message.chat.id, message_id=message.message_id)
@@ -124,7 +132,7 @@ async def responsibilities(message: types.Message, state: dispatcher.FSMContext)
         return
 
     async with state.proxy() as data:
-        data["responsibilities"] = message.text.replace("\n", "\n—")
+        data["responsibilities"] = message.text.replace("\n", "\n— ")
 
     await FSMForm.next()
     await message.answer(
@@ -141,7 +149,7 @@ async def requirements(message: types.Message, state: dispatcher.FSMContext):
         return
 
     async with state.proxy() as data:
-        data["requirements"] = message.text.replace("\n", "\n—")
+        data["requirements"] = message.text.replace("\n", "\n— ")
 
     await FSMForm.next()
     await message.answer(
@@ -158,11 +166,11 @@ async def terms(message: types.Message, state: dispatcher.FSMContext):
         return
 
     async with state.proxy() as data:
-        data["terms"] = message.text.replace("\n", "\n—")
+        data["terms"] = message.text.replace("\n", "\n— ")
 
     await FSMForm.next()
     await message.answer(
-        "Теперь требуется указать способ связи с Вами и свой контакт:"
+        "Теперь требуется указать свой контакт:"
     )
 
 

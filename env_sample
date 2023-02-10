@@ -6,3 +6,6 @@ ADMINS="admin id [integer]"
 
 # DATABASE
 DB_NAME="example.sqlite3"
+
+# PAYMENT
+PAYMENT_TOKEN="y kassa payment token"

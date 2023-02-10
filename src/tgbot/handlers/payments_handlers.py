@@ -13,19 +13,28 @@ def build_cart(username_id) -> list:
             label=product[1], amount=product[2] * 100
         ) for product in db.select_products_from_cart(username_id)
     ]
-    print(db.select_form(username_id))
 
     return prices
 
 
 async def buy_process(callback: types.CallbackQuery):
+    db = DataBaseHelper()
+
+    if db.select_form(callback.from_user.id) == []:
+        await callback.answer(
+            text="Вы ещё не заполнили анкету",
+            show_alert=True
+        )
+        return
+
     await callback.bot.delete_message(
         callback.message.chat.id,
         callback.message.message_id
     )
+
     await callback.message.bot.send_invoice(
         callback.message.chat.id,
-        title="Размещение вакансии в канал",
+        title="Размещение рекламного поста",
         description="Оплатите товары",
         payload="example",
         provider_token=PROVIDER_TOKEN,
@@ -38,7 +47,7 @@ async def buy_process(callback: types.CallbackQuery):
 
 async def checkout_process(pre_checkout: types.PreCheckoutQuery):
     await pre_checkout.bot.answer_pre_checkout_query(
-        pre_checkout.id, ok=True, error_message="что-то пошло не так"
+        pre_checkout.id, ok=True, error_message="Что-то пошло не так"
     )
 
 
@@ -55,7 +64,10 @@ async def successful_payment(message: types.Message):
     )
     await message.bot.send_message(
         message.chat.id,
-        "Оплата прошла"
+        "<b>Оплата</b>\n\n"
+        "Успешно ✅\n" +
+        "Анкета отправлена на модерацию\n" +
+        "Я сообщу Вам когда её опубликуют"
     )
 
 
