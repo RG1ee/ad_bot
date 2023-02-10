@@ -14,9 +14,8 @@ async def profile(message: types.Message):
 
     await message.bot.send_message(
         message.chat.id,
-        text=("<b>Профиль\n\n</b>") +
+        text="<b>Профиль\n\n</b>" +
         f"{message.from_user.first_name} {message.from_user.last_name}\n" +
-        "<u>Ваша текущая анкета:</u>" +
         form,
         reply_markup=keyboard
     )
