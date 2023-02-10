@@ -1,6 +1,6 @@
-def format(data):
+def format(data) -> str:
     FORM = f"""
-    <b>{data['company_name']}</b>
+<b>{data['company_name']}</b>
 
 <i>{data['company_discription']}</i>
 

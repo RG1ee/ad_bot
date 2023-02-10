@@ -1,6 +1,7 @@
 from aiogram import types, dispatcher
 
 from tgbot.misc.cart_fromat import cart
+from tgbot.misc.form_format_db import format_from_db
 
 from tgbot.misc.help_data import help_information, addiction_page, return_page, subtraction_page
 from tgbot.misc.service_fromat import service_information_format
@@ -52,7 +53,8 @@ async def show_packages(callback: types.CallbackQuery):
 
     await callback.bot.send_message(
         callback.message.chat.id,
-        text="НАШИ ВЫГОДНЫЕ ПАКЕТЫ С УСЛУГАМИ",
+        text="<b>Готовые пакеты</b>\n\n" +
+        "Ниже представлены готовые наборы по выгодной цене",
         reply_markup=keyboard
     )
     await callback.bot.delete_message(
@@ -120,7 +122,8 @@ async def show_cart(callback: types.CallbackQuery):
     else:
         await callback.bot.send_message(
             callback.message.chat.id,
-            text="Корзина пуста",
+            text="<b>Корзина</b>\n\n" +
+            "Ваша корзина пустая",
             reply_markup=keyboard
         )
 
@@ -130,18 +133,24 @@ async def return_to_services_list(callback: types.CallbackQuery):
     await callback.bot.delete_message(
         callback.message.chat.id, callback.message.message_id
     )
-    await callback.message.answer("Все наши услуги", reply_markup=keyboard)
+    await callback.message.answer(
+        "<b>Услуги</b>\n\n" +
+        "Добавьте нужные каналы в корзину или выберите готовый пакет услуг",
+        reply_markup=keyboard
+        )
 
 
 async def back_to_menu(callback: types.CallbackQuery):
     keyboard = profile_keyboard()
+    form = format_from_db(callback.from_user.id)
     await callback.bot.delete_message(
         callback.message.chat.id, callback.message.message_id
     )
     await callback.bot.send_message(
         callback.message.chat.id,
         text="<b>Профиль</b>\n\n" +
-        f"{callback.from_user.first_name} {callback.from_user.last_name}",
+        f"{callback.from_user.first_name} {callback.from_user.last_name}\n" +
+        form,
         reply_markup=keyboard
     )
 
@@ -157,7 +166,8 @@ async def clear_cart(callback: types.CallbackQuery):
     )
     await callback.bot.send_message(
         callback.message.chat.id,
-        text="Корзина пуста",
+        text="<b>Корзина</b>\n\n" +
+             "Ваша корзина пустая",
         reply_markup=keyboard
     )
 

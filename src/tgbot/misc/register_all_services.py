@@ -15,10 +15,10 @@ def register_all_filters(dp: Dispatcher):
 
 def register_all_handlers(dp: Dispatcher):
     register_user(dp)
-    register_message(dp)
     register_state_form(dp)
     register_all_callback(dp)
     register_payments_handlers(dp)
+    register_message(dp)
 
 
 async def register_all_services(dp: Dispatcher):

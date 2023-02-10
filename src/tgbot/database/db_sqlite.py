@@ -106,6 +106,25 @@ class DataBaseHelper:
         )
         self.connect.commit()
 
+    def update_from(self, data: dict) -> None:
+        self.cursor.execute(
+            """
+            UPDATE forms SET
+            company_name = (?),
+            company_discription = (?),
+            responsibilities = (?),
+            requirements = (?),
+            terms = (?),
+            contact_link = (?)
+            WHERE user_forms = (?);
+            """, (
+                data["company_name"], data["company_discription"],
+                data["responsibilities"], data["requirements"], data["terms"],
+                data["contact_link"], data["user_forms"]
+            )
+        )
+        self.connect.commit()
+
     def select_form(self, username_id) -> list[Any]:
         return self.cursor.execute(
             """

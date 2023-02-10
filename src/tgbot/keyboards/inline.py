@@ -69,9 +69,6 @@ def profile_keyboard() -> types.InlineKeyboardMarkup:
     keyboard.add(
         types.InlineKeyboardButton(
             text="Корзина", callback_data="cart"
-        ),
-        types.InlineKeyboardButton(
-            text="Мои анкеты", callback_data="my_form"
         )
     )
 
