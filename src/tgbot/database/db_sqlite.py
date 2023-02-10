@@ -199,29 +199,3 @@ class DataBaseHelper:
         )
 
         self.connect.commit()
-
-    def select_all_paid_orders(self) -> list[Any]:
-        return self.cursor.execute(
-            """
-            SELECT * FROM paidOrders
-            WHERE posted = FALSE;
-            """
-        ).fetchall()
-
-    def select_paid_orders_by_id(self, id) -> list[Any]:
-        return self.cursor.execute(
-            """
-            SELECT * FROM paidOrders
-            WHERE id = ?;
-            """, (id,)
-        ).fetchall()
-
-    def confirm_paid_orders(self, user_id: int, id: int) -> None:
-        self.cursor.execute(
-            """
-            UPDATE paidOrders SET posted = True
-            WHERE user_id = ? AND id = ?;
-            """, (user_id, id)
-        )
-
-        self.connect.commit()
