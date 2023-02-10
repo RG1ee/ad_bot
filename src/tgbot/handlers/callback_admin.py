@@ -8,7 +8,6 @@ from tgbot.keyboards.inline import back_to_all_orders_and_confirm_keyboard, all_
 async def show_paid_orders(callback: types.CallbackQuery):
     db = DataBaseHelper()
     callback_data = callback.data.split(":")
-    print(callback_data)
     keyboard = back_to_all_orders_and_confirm_keyboard(int(callback_data[2]), int(callback_data[1]))
 
     await callback.bot.delete_message(
@@ -29,7 +28,6 @@ async def show_paid_orders(callback: types.CallbackQuery):
 
 async def confirm_order(callback: types.CallbackQuery):
     callback_data = callback.data.split(":")
-    print(callback.data)
     db = DataBaseHelper()
     db.confirm_paid_orders(
         int(callback_data[1]),
