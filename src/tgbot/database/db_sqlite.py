@@ -78,6 +78,7 @@ class DataBaseHelper:
                 user_id INTEGER NOT NULL,
                 date TIMESTAMP NOT NULL,
                 posted BOOL,
+                services TEXT,
                 FOREIGN KEY(id_form) REFERENCES forms(id) ON UPDATE CASCADE,
                 FOREIGN KEY(user_id) REFERENCES users(telegram_id) ON UPDATE CASCADE
             );
@@ -192,9 +193,9 @@ class DataBaseHelper:
         self.cursor.execute(
             """
             INSERT INTO paidOrders VALUES (
-                ?, ?, ?, ?, ?
+                ?, ?, ?, ?, ?, ?
             );
-            """, (None, data["id_from"], data["user_id"], data["date"], 0)
+            """, (None, data["id_form"], data["user_id"], data["date"], 0, data["services"])
         )
 
         self.connect.commit()

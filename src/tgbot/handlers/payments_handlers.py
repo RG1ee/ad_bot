@@ -6,15 +6,18 @@ from settings.const import PROVIDER_TOKEN
 from tgbot.database.db_sqlite import DataBaseHelper
 
 
-def build_cart(username_id) -> list:
+def build_cart(username_id: int | None) -> tuple[list[dict], str]:
     db = DataBaseHelper()
     prices = [
-        types.LabeledPrice(
+        dict(
             label=product[1], amount=product[2] * 100
         ) for product in db.select_products_from_cart(username_id)
     ]
+    services = ""
+    for label in prices:
+        services += f" {label['label']}"
 
-    return prices
+    return prices, services.strip()
 
 
 async def buy_process(callback: types.CallbackQuery):
@@ -36,11 +39,11 @@ async def buy_process(callback: types.CallbackQuery):
         callback.message.chat.id,
         title="Размещение рекламного поста",
         description="Оплатите товары",
-        payload="example",
+        payload=build_cart(callback.from_user.id)[1],
         provider_token=PROVIDER_TOKEN,
         currency="rub",
-        start_parameter="example",
-        prices=build_cart(callback.from_user.id),
+        start_parameter="123",
+        prices=build_cart(callback.from_user.id)[0],
         need_email=True
     )
 
@@ -54,10 +57,12 @@ async def checkout_process(pre_checkout: types.PreCheckoutQuery):
 async def successful_payment(message: types.Message):
     db = DataBaseHelper()
     data_to_save = {
-        "id_from": db.select_form(message.from_user.id)[0][0],
+        "id_form": db.select_form(message.from_user.id)[0][0],
         "user_id": message.from_user.id,
-        "date": datetime.now()
+        "date": datetime.now(),
+        "services": message.successful_payment.invoice_payload
     }
+    print(data_to_save["services"])
     db.clear_cart(message.from_user.id)
     db.add_to_paid_orders(
         data_to_save
