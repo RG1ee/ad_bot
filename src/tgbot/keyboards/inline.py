@@ -85,3 +85,33 @@ def back_to_menu_keyboard() -> types.InlineKeyboardMarkup:
     )
 
     return keyboard
+
+
+def all_paid_form_keyboard() -> types.InlineKeyboardMarkup:
+    db = DataBaseHelper()
+    keyboard = types.InlineKeyboardMarkup(row_width=3)
+    for paid_form in db.select_all_paid_orders():
+        keyboard.insert(
+            types.InlineKeyboardButton(
+                text=f"Заказ №{paid_form[0]}",
+                callback_data=f"orders:{paid_form[0]}:{paid_form[2]}"
+            )
+        )
+
+    return keyboard
+
+
+def back_to_all_orders_and_confirm_keyboard(user_id: int, id: int) -> types.InlineKeyboardMarkup:
+    keyboard = types.InlineKeyboardMarkup()
+    keyboard.add(
+            types.InlineKeyboardButton(
+                text="Вернуться ко всем заказам",
+                callback_data="back_to_orders"
+            ),
+            types.InlineKeyboardButton(
+                text="Подтвердить",
+                callback_data=f"confirm_form:{user_id}:{id}"
+            )
+        )
+
+    return keyboard

@@ -35,6 +35,7 @@ async def buy_process(callback: types.CallbackQuery):
         callback.message.message_id
     )
 
+
     await callback.message.bot.send_invoice(
         callback.message.chat.id,
         title="Размещение рекламного поста",
