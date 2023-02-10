@@ -4,6 +4,7 @@ from tgbot.misc.cart_fromat import cart
 from tgbot.misc.form_format_db import format_from_db
 
 from tgbot.misc.help_data import help_information, addiction_page, return_page, subtraction_page
+from tgbot.misc.package_format import package_information_format
 from tgbot.misc.service_fromat import service_information_format
 from tgbot.misc.decorators import check_user_status
 from tgbot.database.db_sqlite import DataBaseHelper
@@ -73,9 +74,25 @@ async def show_service_info(callback: types.CallbackQuery):
     )
 
 
+async def show_package_info(callback: types.CallbackQuery):
+    keyboard = back_and_cart_keyboard(callback.data.split(":")[1])
+
+    await callback.bot.delete_message(callback.message.chat.id, callback.message.message_id)
+    await callback.message.answer(
+        text=package_information_format(callback.data.split(":")[1]),
+        reply_markup=keyboard
+    )
+
+
 async def add_to_cart(callback: types.CallbackQuery):
     db = DataBaseHelper()
+    
     service_data = db.select_service_with_key(callback.data.split(":")[1])
+    
+    if service_data == []:
+        print("ЗАГЛУШКА: Добавление пакета")
+        return
+
     cart_data = db.check_product_in_cart(callback.from_user.id)
     try:
         for i in cart_data:
@@ -221,5 +238,10 @@ def register_all_callback(dp: dispatcher.Dispatcher):
     dp.register_callback_query_handler(
         show_cart,
         lambda callback: "cart" in callback.data,
+        state="*"
+    )
+    dp.register_callback_query_handler(
+        show_package_info,
+        lambda callback: callback.data.startswith("pgShow"),
         state="*"
     )

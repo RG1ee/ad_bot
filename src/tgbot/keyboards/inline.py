@@ -42,7 +42,7 @@ def packages_keyboard() -> types.InlineKeyboardMarkup:
         keyboard.add(
             types.InlineKeyboardButton(
                 text=f"{package[0]}",
-                callback_data="pgShow"
+                callback_data=f"pgShow:{package[0]}"
             )
         )
 
