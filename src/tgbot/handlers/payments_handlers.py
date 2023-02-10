@@ -62,7 +62,6 @@ async def successful_payment(message: types.Message):
         "date": datetime.now(),
         "services": message.successful_payment.invoice_payload
     }
-    print(data_to_save["services"])
     db.clear_cart(message.from_user.id)
     db.add_to_paid_orders(
         data_to_save
