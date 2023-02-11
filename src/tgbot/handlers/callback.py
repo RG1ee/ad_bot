@@ -9,6 +9,7 @@ from tgbot.misc.service_fromat import service_information_format
 from tgbot.misc.decorators import check_user_status
 from tgbot.database.db_sqlite import DataBaseHelper
 from tgbot.keyboards.inline import (
+    back_and_cart_package_keyboard,
     help_pages_keyboard,
     services_keyboard,
     packages_keyboard,
@@ -75,7 +76,7 @@ async def show_service_info(callback: types.CallbackQuery):
 
 
 async def show_package_info(callback: types.CallbackQuery):
-    keyboard = back_and_cart_keyboard(callback.data.split(":")[1])
+    keyboard = back_and_cart_package_keyboard(callback.data.split(":")[1])
 
     await callback.bot.delete_message(callback.message.chat.id, callback.message.message_id)
     await callback.message.answer(
@@ -86,30 +87,72 @@ async def show_package_info(callback: types.CallbackQuery):
 
 async def add_to_cart(callback: types.CallbackQuery):
     db = DataBaseHelper()
+    good_type = callback.data.split(":")[1]
+    cart_data = db.check_product_in_cart(callback.from_user.id)
 
-    service_data = db.select_service_with_key(callback.data.split(":")[1])
+    if good_type == "pg_option":
+        data = callback.data.split(":")
+        package = db.select_package_with_key(data[2])[0]
+        pg_data = [package[0]+f" (вариант {data[-1]})", package[-1]]
 
-    if service_data == []:
-        print("ЗАГЛУШКА: Добавление пакета")
+        try:
+            for i in cart_data:
+                if pg_data[0] in i:
+                    await callback.answer(
+                        text="Такой пакет уже находится в корзине",
+                        show_alert=True
+                    )
+                    return
+        except Exception:
+            pass
+
+        db.add_product_to_cart(callback.from_user.id, pg_data)
+        await callback.answer(
+            text=f"Пакет {pg_data[0]} добавлен в корзину",
+            show_alert=True
+        )
         return
 
-    cart_data = db.check_product_in_cart(callback.from_user.id)
-    try:
-        for i in cart_data:
-            if callback.data.split(":")[1] in i:
-                await callback.answer(
-                    text="Услуга уже добавлена в корзину",
-                    show_alert=True
-                )
-                return
-    except Exception:
-        pass
+    elif good_type == "pg_one":
+        data = callback.data.split(":")
+        package = db.select_package_with_key(data[-1])[0]
 
-    db.add_product_to_cart(callback.from_user.id, service_data[0])
-    await callback.answer(
-        text=f"Услуга публикации в канале «{service_data[0][0]}» добавлена в корзину",
-        show_alert=True
-    )
+        try:
+            for i in cart_data:
+                if package[0] in i:
+                    await callback.answer(
+                        text="Такой пакет уже находится в корзине",
+                        show_alert=True
+                    )
+                    return
+        except Exception:
+            pass
+
+        db.add_product_to_cart(callback.from_user.id, package)
+        await callback.answer(
+            text=f"Пакет {package[0]} добавлен в корзину",
+            show_alert=True
+        )
+        return
+
+    else:
+        service_data = db.select_service_with_key(callback.data.split(":")[1])
+        try:
+            for i in cart_data:
+                if callback.data.split(":")[1] in i:
+                    await callback.answer(
+                        text="Услуга уже добавлена в корзину",
+                        show_alert=True
+                    )
+                    return
+        except Exception:
+            pass
+
+        db.add_product_to_cart(callback.from_user.id, service_data[0])
+        await callback.answer(
+            text=f"Услуга публикации в канале «{service_data[0][0]}» добавлена в корзину",
+            show_alert=True
+        )
 
 
 async def show_cart(callback: types.CallbackQuery):

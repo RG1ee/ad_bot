@@ -64,6 +64,39 @@ def back_and_cart_keyboard(service) -> types.InlineKeyboardMarkup:
     return keyboard
 
 
+def back_and_cart_package_keyboard(package) -> types.InlineKeyboardMarkup:
+    db = DataBaseHelper()
+    discription = db.select_package_with_key(package)[0][1]
+
+    keyboard = types.InlineKeyboardMarkup(row_width=1)
+    option = 1
+    for i in range(len(discription)):
+        try:
+            int(discription[i])
+            if discription[i+1] == ")":
+                keyboard.add(
+                    types.InlineKeyboardButton(
+                        text=f"В корзину {str(option)} вариант",
+                        callback_data=f"add_to_cart:pg_option:{package}:{str(option)}"
+                    )
+                )
+                option += 1
+        except Exception:
+            pass
+    if option == 1:
+        keyboard.add(
+            types.InlineKeyboardButton(
+                text="В корзину",
+                callback_data=f"add_to_cart:pg_one:{package}"
+            )
+        )
+    keyboard.row(
+        types.InlineKeyboardButton("Назад", callback_data="return_services")
+    )
+
+    return keyboard
+
+
 def profile_keyboard() -> types.InlineKeyboardMarkup:
     keyboard = types.InlineKeyboardMarkup(row_width=2)
     keyboard.add(
