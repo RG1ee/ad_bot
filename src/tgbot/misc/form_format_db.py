@@ -9,7 +9,6 @@ def format_from_db(user_id: int) -> str:
         TEXT = "\n<u>Ваша текущая анкета:</u>\n \nВы ещё не заполнили анкету\n"
         return TEXT
     TEXT = f"""
-<u>Ваша текущая анкета:</u>
 ```
 <b>{data[1]}</b>
 
