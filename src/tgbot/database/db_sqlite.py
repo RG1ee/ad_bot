@@ -155,6 +155,14 @@ class DataBaseHelper:
             """, (name_service,)
         ).fetchall()
 
+    def select_package_with_key(self, name_package: str) -> list[Any]:
+        return self.cursor.execute(
+            """
+            SELECT * FROM servicePackages WHERE name_packege = ?;
+            """, (name_package,)
+        ).fetchall()
+
+
     def select_products_from_cart(self, username_id) -> list[Any]:
         return self.cursor.execute(
             """

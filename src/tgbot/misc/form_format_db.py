@@ -6,7 +6,7 @@ def format_from_db(user_id: int) -> str:
     try:
         data = db.select_form(user_id)[0]
     except Exception:
-        TEXT = "\n<u>Ваша текущая анкета:</u>\n \nВы ещё не заполнили анкету\n"
+        TEXT = "\nВы ещё не заполнили анкету\n"
         return TEXT
     TEXT = f"""
 ```
