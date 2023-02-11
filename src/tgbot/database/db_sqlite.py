@@ -162,7 +162,6 @@ class DataBaseHelper:
             """, (name_package,)
         ).fetchall()
 
-
     def select_products_from_cart(self, username_id) -> list[Any]:
         return self.cursor.execute(
             """
