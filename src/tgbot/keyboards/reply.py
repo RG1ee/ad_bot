@@ -11,7 +11,6 @@ def main_keyboard() -> types.ReplyKeyboardMarkup:
         types.KeyboardButton(text="Все услуги🔥")
     )
     keyboard.row(
-        types.KeyboardButton(text="История заказов🕖"),
         types.KeyboardButton(text="Помощь🛟")
     )
 
@@ -26,9 +25,6 @@ def admin_keyboard(main_keyboard: types.ReplyKeyboardMarkup):
         ),
         types.KeyboardButton(
             text="Посмотреть анкеты"
-        ),
-        types.KeyboardButton(
-            text="Выключить уведомления"
         )
     )
 
