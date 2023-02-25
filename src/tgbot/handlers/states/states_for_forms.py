@@ -1,25 +1,26 @@
 from aiogram import types, dispatcher
 from aiogram.dispatcher.filters import Text
-from settings.const import CHAT_ID
 
+from settings.const import CHAT_ID
 from tgbot.misc.form_format import format
-from tgbot.keyboards.reply import admin_keyboard, cancel_keyboard, confirm_keyboard, main_keyboard
 from tgbot.misc.states.states import FSMForm
 from tgbot.database.db_sqlite import DataBaseHelper
+from tgbot.keyboards.reply import (
+    admin_keyboard,
+    cancel_keyboard,
+    confirm_keyboard,
+    main_keyboard,
+    cart_keyboard,
+)
+from tgbot.keyboards.inline import services_keyboard
 
 
 async def confirm_handler(message: types.Message, state: dispatcher.FSMContext):
     async with state.proxy() as data:
         try:
-            user_status = await message.bot.get_chat_member(
-                chat_id=CHAT_ID,
-                user_id=message.from_user.id
-            )
 
-            if user_status.status == types.ChatMemberStatus.CREATOR:
-                keyboard = admin_keyboard(main_keyboard())
-            else:
-                keyboard = main_keyboard()
+            keyboard = services_keyboard()
+            cart = cart_keyboard()
 
             data_to_save = {
                 "company_name": data["company_name"],
@@ -34,13 +35,23 @@ async def confirm_handler(message: types.Message, state: dispatcher.FSMContext):
             if db.select_form(message.from_user.id) == []:
                 db.insert_from(data_to_save)
                 await message.answer(
-                    f"Анкета компании <b>{data['company_name']}</b> сохранена",
+                    text=f"Анкета компании <b>{data['company_name']}</b> сохранена",
+                    reply_markup=cart
+                )
+                await message.answer(
+                    "<b>Услуги</b>\n\n" +
+                    "Добавьте нужные каналы в корзину или выберите готовый пакет услуг",
                     reply_markup=keyboard
                 )
             else:
                 db.update_from(data_to_save)
                 await message.answer(
-                    f"Анкета компании <b>{data['company_name']}</b> обновлена",
+                    text=f"Анкета компании <b>{data['company_name']}</b> обновлена",
+                    reply_markup=cart
+                )
+                await message.answer(
+                    "<b>Услуги</b>\n\n" +
+                    "Добавьте нужные каналы в корзину или выберите готовый пакет услуг",
                     reply_markup=keyboard
                 )
             await state.finish()
@@ -204,7 +215,7 @@ async def contact_link(message: types.Message, state: dispatcher.FSMContext):
 def register_state_form(dp: dispatcher.Dispatcher):
     dp.register_message_handler(
         confirm_handler,
-        Text("Подтвердить✅"),
+        Text("Подтвердить и перейти к услугам"),
         state="*"
     )
     dp.register_message_handler(

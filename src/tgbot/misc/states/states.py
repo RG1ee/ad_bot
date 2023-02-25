@@ -8,3 +8,7 @@ class FSMForm(StatesGroup):
     requirements = State()
     terms = State()
     contact_link = State()
+
+
+class FSMservice(StatesGroup):
+    name_service = State()

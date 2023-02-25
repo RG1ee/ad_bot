@@ -1,6 +1,5 @@
 from aiogram import types, dispatcher
 
-from tgbot.misc.cart_fromat import cart
 from tgbot.misc.form_format_db import format_from_db
 
 from tgbot.misc.package_format import package_information_format
@@ -13,7 +12,7 @@ from tgbot.keyboards.inline import (
     help_pages_keyboard,
     services_keyboard,
     packages_keyboard,
-    back_and_cart_keyboard, back_to_menu_keyboard, profile_keyboard,
+    back_and_cart_keyboard, profile_keyboard,
 )
 
 
@@ -155,39 +154,6 @@ async def add_to_cart(callback: types.CallbackQuery):
         )
 
 
-async def show_cart(callback: types.CallbackQuery):
-    db = DataBaseHelper()
-    all_products_from_cart = db.select_products_from_cart(callback.from_user.id)
-    await callback.bot.delete_message(
-        callback.message.chat.id, callback.message.message_id
-    )
-    keyboard = back_to_menu_keyboard()
-    if len(all_products_from_cart) > 0:
-        keyboard.row(
-            types.InlineKeyboardButton(
-                text="Очистить корзину",
-                callback_data="clear_cart"
-            ),
-            types.InlineKeyboardButton(
-                text="Оплатить",
-                callback_data="buy"
-            )
-        )
-
-        await callback.bot.send_message(
-            callback.message.chat.id,
-            text=cart(all_products_from_cart),
-            reply_markup=keyboard
-        )
-    else:
-        await callback.bot.send_message(
-            callback.message.chat.id,
-            text="<b>Корзина</b>\n\n" +
-            "Ваша корзина пустая",
-            reply_markup=keyboard
-        )
-
-
 async def return_to_services_list(callback: types.CallbackQuery):
     keyboard = services_keyboard()
     await callback.bot.delete_message(
@@ -219,15 +185,22 @@ async def clear_cart(callback: types.CallbackQuery):
     db = DataBaseHelper()
     db.clear_cart(callback.from_user.id)
 
-    keyboard = back_to_menu_keyboard()
-
     await callback.bot.delete_message(
         callback.message.chat.id, callback.message.message_id
+    )
+    keyboard = types.ReplyKeyboardMarkup(
+        resize_keyboard=True, input_field_placeholder="Услуги",
+        row_width=1
+    )
+    keyboard.insert(
+        types.KeyboardButton(
+            "Все услуги🔥"
+        )
     )
     await callback.bot.send_message(
         callback.message.chat.id,
         text="<b>Корзина</b>\n\n" +
-             "Ваша корзина пустая",
+        "Ваша корзина пустая",
         reply_markup=keyboard
     )
 
@@ -276,11 +249,6 @@ def register_all_callback(dp: dispatcher.Dispatcher):
     dp.register_callback_query_handler(
         add_to_cart,
         lambda callback: callback.data.startswith("add_to_cart"),
-        state="*"
-    )
-    dp.register_callback_query_handler(
-        show_cart,
-        lambda callback: "cart" in callback.data,
         state="*"
     )
     dp.register_callback_query_handler(

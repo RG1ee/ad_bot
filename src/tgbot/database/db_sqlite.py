@@ -52,9 +52,9 @@ class DataBaseHelper:
         self.connect.execute(
             """
             CREATE TABLE IF NOT EXISTS servicePackages (
-                name_packege TEXT PRIMARY KEY,
+                name_package TEXT PRIMARY KEY,
                 package_discription TEXT,
-                packege_price INTEGER
+                package_price INTEGER
             );
             """
         )
@@ -90,8 +90,7 @@ class DataBaseHelper:
     def insert_user(self, username_id: int) -> None:
         self.cursor.execute(
             """
-            INSERT OR IGNORE INTO users VALUES (?, ?, ?);
-            """, (None, username_id, 1)
+            INSERT OR IGNORE INTO users VALUES (?, ?, ?); """, (None, username_id, 1)
         )
         self.connect.commit()
 
@@ -144,7 +143,7 @@ class DataBaseHelper:
     def select_all_packeges(self) -> list[Any]:
         return self.cursor.execute(
             """
-            SELECT name_packege, packege_price, package_discription FROM servicePackages;
+            SELECT name_package, package_price, package_discription FROM servicePackages;
             """
         ).fetchall()
 

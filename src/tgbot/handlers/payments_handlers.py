@@ -21,6 +21,11 @@ def build_cart(username_id: int | None) -> tuple[list[dict], str]:
 
 
 async def buy_process(callback: types.CallbackQuery):
+    await callback.bot.send_message(
+        callback.message.chat.id,
+        "ОПЛАТА",
+        reply_markup=types.ReplyKeyboardRemove()
+    )
     db = DataBaseHelper()
 
     if db.select_form(callback.from_user.id) == []:

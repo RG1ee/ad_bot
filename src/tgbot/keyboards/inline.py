@@ -46,6 +46,13 @@ def packages_keyboard() -> types.InlineKeyboardMarkup:
             )
         )
 
+    keyboard.row(
+        types.InlineKeyboardButton(
+            text="Вернуться к услугам",
+            callback_data="return_services"
+        )
+    )
+
     return keyboard
 
 

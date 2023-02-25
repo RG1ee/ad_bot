@@ -8,4 +8,4 @@ ADMINS="admin id [integer]"
 DB_NAME="example.sqlite3"
 
 # PAYMENT
-PAYMENT_TOKEN="y kassa payment token"
+PAYMENT_TOKEN="your kassa payment token"

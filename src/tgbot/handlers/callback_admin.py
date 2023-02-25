@@ -16,7 +16,7 @@ async def show_paid_orders(callback: types.CallbackQuery):
     )
     await callback.bot.send_message(
         callback.message.chat.id,
-        ("<b>ДЛЯ НАЧАЛА ВЫЛОЖИТЕ ВАКАНСИЮ В УКАЗАННЫЕ КАНАЛЫ, А ПОТОМ НАЖМИТЕ ПОДТЕРДИТЬ</b>\n" +
+        ("<b>ДЛЯ НАЧАЛА ВЫЛОЖИТЕ ВАКАНСИЮ В УКАЗАННЫЕ КАНАЛЫ, А ПОТОМ НАЖМИТЕ ПОДТВЕРДИТЬ</b>\n" +
          "\nАнкета\n" + format_from_db(int(callback_data[2])) +
          "<b>\nУслуга / Выгодный пакет</b>" +
          f"\n {db.select_paid_orders_by_id(callback_data[1])[0][-1]}\n" +
